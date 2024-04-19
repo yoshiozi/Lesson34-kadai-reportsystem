@@ -24,14 +24,14 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "repots")
+@Table(name = "reports")
 @SQLRestriction("delete_flg = false")
 public class Report {
 
 //エンティティのリレーション実装方法(多対１)
-//@ManyToOne
-//@JoinColumn(name = "employee_code", referencedColumnName = "code", nullable = false)
-//private Employee employee;
+@ManyToOne
+@JoinColumn(name = "employee_code", referencedColumnName = "code", nullable = false)
+private Employee employee;
 
     // ID　オートインクリメント設定
     @Id

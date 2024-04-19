@@ -36,7 +36,6 @@ public class Employee {
             return this.name;
         }
     }
-    
     //エンティティのリレーション実装
 //    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
 //    private List<Report> reportList;
