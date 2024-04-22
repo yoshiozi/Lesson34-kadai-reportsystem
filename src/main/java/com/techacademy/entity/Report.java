@@ -28,12 +28,12 @@ import lombok.Data;
 @SQLRestriction("delete_flg = false")
 public class Report {
 
-//エンティティのリレーション実装方法(多対１)
-@ManyToOne
-@JoinColumn(name = "employee_code", referencedColumnName = "code", nullable = false)
-private Employee employee;
+    //社員番号　エンティティのリレーション実装方法(多対１)
+    @ManyToOne
+    @JoinColumn(name = "employee_code", referencedColumnName = "code", nullable = false)
+    private Employee employee;
 
-    // ID　オートインクリメント設定
+    // ID オートインクリメント設定
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -44,21 +44,18 @@ private Employee employee;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate reportDate;
 
-    // タイトル　１００文字以内
+    // タイトル １００文字以内
     @Column(length = 100, nullable = false)
-    @Length(max=100)
+    @Length(max = 100)
     private String title;
 
-    // 内容　ロングテキスト
-    @Column(columnDefinition="LONGTEXT",nullable = false)
+    // 内容 ロングテキスト
+    @Column(columnDefinition = "LONGTEXT", nullable = false)
+    @Length(max = 600)
     private String content;
 
-    // 社員番号　（FK？）１０文字以内
-    @Column(length = 10)
-    private String employeecode;
-
     // 削除フラグ(論理削除を行うため)
-    @Column(columnDefinition="TINYINT", nullable = false)
+    @Column(columnDefinition = "TINYINT", nullable = false)
     private boolean deleteFlg;
 
     // 登録日時

@@ -17,27 +17,29 @@ import com.techacademy.constants.ErrorKinds;
 import com.techacademy.constants.ErrorMessage;
 
 import com.techacademy.entity.Employee;
+import com.techacademy.entity.Report;
 import com.techacademy.service.EmployeeService;
+import com.techacademy.service.ReportService;
 import com.techacademy.service.UserDetail;
 
 @Controller
 @RequestMapping("reports")
 public class RportController {
 
-//    private final EmployeeService employeeService;
-//
-//    @Autowired
-//    public RportController(EmployeeService employeeService) {
-//        this.employeeService = employeeService;
-//    }
-//
-    // 従業員一覧画面
+    private final ReportService reportService;
+
+    @Autowired
+    public RportController(ReportService reportService) {
+        this.reportService = reportService;
+    }
+
+    // 日報一覧画面
     @GetMapping
     public String list(Model model) {
-//
-//        model.addAttribute("listSize", employeeService.findAll().size());
-//        model.addAttribute("employeeList", employeeService.findAll());
-//
+
+        model.addAttribute("listSize", reportService.findAll().size());
+        model.addAttribute("reportList", reportService.findAll());
+
         return "reports/list";
     }
 //
@@ -87,36 +89,23 @@ public class RportController {
 //            return "redirect:/employees";
 //        }
 //
-//    // 従業員新規登録画面
-//    @GetMapping(value = "/add")
-//    public String create(@ModelAttribute Employee employee) {
-//
-//        return "employees/new";
-//    }
-//
-//    // 従業員新規登録処理
-//    @PostMapping(value = "/add")
-//    public String add(@Validated Employee employee, BindingResult res, Model model) {
-//
-//        // パスワード空白チェック
-//        /*
-//         * エンティティ側の入力チェックでも実装は行えるが、更新の方でパスワードが空白でもチェックエラーを出さずに
-//         * 更新出来る仕様となっているため上記を考慮した場合に別でエラーメッセージを出す方法が簡単だと判断
-//         */
-//        if ("".equals(employee.getPassword())) {
-//            // パスワードが空白だった場合
-//            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.BLANK_ERROR),
-//                    ErrorMessage.getErrorValue(ErrorKinds.BLANK_ERROR));
-//
-//            return create(employee);
-//
-//        }
-//
-//        // 入力チェック
-//        if (res.hasErrors()) {
-//            return create(employee);
-//        }
-//
+    // 日報新規登録画面
+    @GetMapping(value = "/add")
+    public String create(@ModelAttribute Report report) {
+
+        return "reports/new";
+    }
+
+    // 日報新規登録処理
+    @PostMapping(value = "/add")
+    public String add(@Validated Report report, BindingResult res, Model model) {
+
+        // 入力チェック
+        if (res.hasErrors()) {
+            return create(report);
+        }
+        return "redirect:/reports";
+    }
 //        // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
 //        // (findByIdでは削除フラグがTRUEのデータが取得出来ないため)
 //        try {
@@ -133,7 +122,7 @@ public class RportController {
 //            return create(employee);
 //        }
 //
-//        return "redirect:/employees";
+//        return "redirect:/report";
 //    }
 //
 //    // 従業員削除処理

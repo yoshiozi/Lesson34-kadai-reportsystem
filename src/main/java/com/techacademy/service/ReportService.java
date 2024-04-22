@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.techacademy.constants.ErrorKinds;
 import com.techacademy.entity.Employee;
+import com.techacademy.entity.Report;
 import com.techacademy.repository.EmployeeRepository;
 import com.techacademy.repository.ReportRepository;
 
@@ -20,14 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ReportService {
 
-//    private final ReportRepository reportRepository;
-//    private final PasswordEncoder passwordEncoder;
-//
-//    @Autowired
-//    public ReportService(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
-//        this.reportRepository = reportRepository;
-//        this.passwordEncoder = passwordEncoder;
-//    }
+    private final ReportRepository reportRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public ReportService(ReportRepository reportRepository, PasswordEncoder passwordEncoder) {
+        this.reportRepository = reportRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 //
 //    // 従業員保存
 //    @Transactional
@@ -47,10 +48,10 @@ public class ReportService {
 //        report.setDeleteFlg(false);
 //
 //        LocalDateTime now = LocalDateTime.now();
-//        employee.setCreatedAt(now);
-//        employee.setUpdatedAt(now);
+//        report.setCreatedAt(now);
+//        report.setUpdatedAt(now);
 //
-//        employeeRepository.save(employee);
+//        reportRepository.save(report);
 //        return ErrorKinds.SUCCESS;
 //    }
 //
@@ -94,10 +95,10 @@ public class ReportService {
 //        return ErrorKinds.SUCCESS;
 //    }
 //
-//    // 従業員一覧表示処理
-//    public List<Employee> findAll() {
-//        return employeeRepository.findAll();
-//    }
+    // 日報一覧表示処理
+    public List<Report> findAll() {
+        return reportRepository.findAll();
+    }
 //
 //    // 1件を検索
 //    public Employee findByCode(String code) {

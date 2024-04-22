@@ -8,6 +8,7 @@
         <div class="h-100 p-3 mb-2 bg-dark text-white col-sm-2">
             <nav th:replace="common/side :: copy"></nav>
         </div>
+        
         <div class="mt-3 h-100 col-sm-10">
             <!-- コンテンツ -->
             <div class="container-fluid p-0">
@@ -23,16 +24,15 @@
                                             <th>日付</th>
                                             <th>タイトル</th>
                                         </tr>
-
                                     </thead>
                                     <tbody>
-                                    /** DB設定できたらDB値と詳細画面作成して移動リンク設定
-                                        <tr th:each="employee:${employeeList}">
-                                            <td class="align-middle" th:text="社員番号"></td>
-                                            <td class="align-middle" th:text="氏名"></td>
-                                            <td class="align-middle" th:text="タイトル"></td>
+                                        <tr th:each="report:${reportList}">
+                                            <td class="align-middle" th:text="${report.employee.name}"></td>
+                                            <td class="align-middle" th:text="${report.reportDate}"></td>
+                                            <td class="align-middle" th:text="${report.title}"></td>
+                                            <!--　詳細画面作成後に実装
                                             <td class="align-middle"><a th:href="@{/employees/{code}/(code=${employee.code})}" class="btn btn-primary">詳細</a></td>
-                                            */
+                                            -->
                                         </tr>
                                     </tbody>
                                 </table>
@@ -40,8 +40,7 @@
                         </div>
                         <p class="mb-3" th:text="'（ 全' + ${listSize} + '件 ）'">
                         <div>
-                        /** 登録画面作成して移動リンク設定*/
-                            <a th:href="@{/reports}" class="btn btn-primary">登録</a>
+                            <a th:href="@{/reports/add}" class="btn btn-primary">登録</a>
                         </div>
                     </div>
                 </div>
