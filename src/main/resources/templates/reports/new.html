@@ -19,7 +19,7 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-body">
-                            <form th:action="@{/report/add}" th:object="${report}" th:method="post">
+                            <form th:action="@{/reports/add}" th:object="${report}" th:method="post">
                                 <div class="wizard wizard-success mb-4">
 
                                     <div class="mb-3">
@@ -32,7 +32,10 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label" for="name">氏名（ログインユーザーの氏名）</label>
+                                        <label class="form-label" for="name">氏名</label>
+                                        <p class="mb-1"></p>
+                                        <td class="align-middle" th:text="${userdetail.name}"></td>
+                                        </tr>
                                     </div>
 
                                     <div class="mb-3">

@@ -45,11 +45,13 @@ public class Report {
     private LocalDate reportDate;
 
     // タイトル １００文字以内
+    @NotEmpty
     @Column(length = 100, nullable = false)
     @Length(max = 100)
     private String title;
 
     // 内容 ロングテキスト
+    @NotEmpty
     @Column(columnDefinition = "LONGTEXT", nullable = false)
     @Length(max = 600)
     private String content;

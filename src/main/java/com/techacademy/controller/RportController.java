@@ -91,35 +91,36 @@ public class RportController {
 //
     // 日報新規登録画面
     @GetMapping(value = "/add")
-    public String create(@ModelAttribute Report report) {
+    public String create(@ModelAttribute Report report, Model model, @AuthenticationPrincipal UserDetail userDetail) {
 
+        model.addAttribute("userdetail", userDetail.getEmployee());
         return "reports/new";
     }
 
     // 日報新規登録処理
     @PostMapping(value = "/add")
-    public String add(@Validated Report report, BindingResult res, Model model) {
+    public String add(@Validated Report report, BindingResult res, Model model, @AuthenticationPrincipal UserDetail userDetail) {
 
         // 入力チェック
         if (res.hasErrors()) {
-            return create(report);
+            return create(report, model, userDetail);
         }
         return "redirect:/reports";
     }
 //        // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
 //        // (findByIdでは削除フラグがTRUEのデータが取得出来ないため)
 //        try {
-//            ErrorKinds result = employeeService.save(employee);
+//            ErrorKinds result = reportService.save(report);
 //
 //            if (ErrorMessage.contains(result)) {
 //                model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-//                return create(employee);
+//                return create(report);
 //            }
 //
 //        } catch (DataIntegrityViolationException e) {
 //            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
 //                    ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
-//            return create(employee);
+//            return create(report);
 //        }
 //
 //        return "redirect:/report";
