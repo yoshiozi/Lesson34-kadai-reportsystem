@@ -36,22 +36,22 @@ public class ReportService {
 //
 //    // 従業員保存
     @Transactional
-//    public ErrorKinds save(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail) {
+    public ErrorKinds save(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail ) {
 
-//        // 日報（作成者＋作成日）重複チェック
-//        if (userDetail.getEmployee() && findByReport(report.getId()) != null) {
-//            return ErrorKinds.DATECHECK_ERROR;
-//        }
-//
-//        report.setDeleteFlg(false);
-//
-//        LocalDateTime now = LocalDateTime.now();
-//        report.setCreatedAt(now);
-//        report.setUpdatedAt(now);
-//
-//        reportRepository.save(report);
-//        return ErrorKinds.SUCCESS;
-//    }
+        // 日報（作成者＋作成日）重複チェック
+        if (repository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate) != null) {
+            return ErrorKinds.DATECHECK_ERROR;
+        }
+
+        report.setDeleteFlg(false);
+
+        LocalDateTime now = LocalDateTime.now();
+        report.setCreatedAt(now);
+        report.setUpdatedAt(now);
+
+        reportRepository.save(report);
+        return ErrorKinds.SUCCESS;
+    }
 //
 //    // 従業員更新保存
 //    @Transactional
