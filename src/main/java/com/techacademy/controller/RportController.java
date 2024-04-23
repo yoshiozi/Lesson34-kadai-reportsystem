@@ -106,25 +106,25 @@ public class RportController {
             return create(report, model, userDetail);
         }
         return "redirect:/reports";
-    }
-//        // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
-//        // (findByIdでは削除フラグがTRUEのデータが取得出来ないため)
+
+        // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
+        // (findByIdでは削除フラグがTRUEのデータが取得出来ないため)
 //        try {
-//            ErrorKinds result = reportService.save(report);
+//            ErrorKinds result = reportService.save(report, model, userDetail);
 //
 //            if (ErrorMessage.contains(result)) {
 //                model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-//                return create(report);
+//                return create(report, model, userDetail);
 //            }
 //
 //        } catch (DataIntegrityViolationException e) {
-//            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
-//                    ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
-//            return create(report);
+//            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DATECHECK_ERROR),
+//                    ErrorMessage.getErrorValue(ErrorKinds.DATECHECK_ERROR));
+//            return create(report, model, userDetail);
 //        }
-//
+
 //        return "redirect:/report";
-//    }
+    }
 //
 //    // 従業員削除処理
 //    @PostMapping(value = "/{code}/delete")

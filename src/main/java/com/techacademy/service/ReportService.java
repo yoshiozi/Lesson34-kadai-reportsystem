@@ -39,7 +39,7 @@ public class ReportService {
     public ErrorKinds save(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail ) {
 
         // 日報（作成者＋作成日）重複チェック
-        if (ReportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate()) != null) {
+        if (reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate()) != null) {
             return ErrorKinds.DATECHECK_ERROR;
         }
 
