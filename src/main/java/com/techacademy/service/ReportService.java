@@ -34,9 +34,15 @@ public class ReportService {
     }
 
 //
-//    // 従業員保存
+//    // 日報新規登録内容の保存
     @Transactional
     public ErrorKinds save(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail ) {
+
+        // resultの設定
+//        ErrorKinds result = employeePasswordCheck(report, userDetail);
+//        if (ErrorKinds.CHECK_OK != result) {
+//            return result;
+//        }
 
         // 日報（作成者＋作成日）重複チェック
         if (reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate()) != null) {
@@ -108,21 +114,12 @@ public class ReportService {
 //    }
 //
 //    // 従業員パスワードチェック
-//    private ErrorKinds employeePasswordCheck(Employee employee) {
+//    private reportUserDetailCheck(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail) {
 //
-//        // 従業員パスワードの半角英数字チェック処理
-//        if (isHalfSizeCheckError(employee)) {
-//
-//            return ErrorKinds.HALFSIZE_ERROR;
-//        }
-//
-//        // 従業員パスワードの8文字～16文字チェック処理
-//        if (isOutOfRangePassword(employee)) {
-//
-//            return ErrorKinds.RANGECHECK_ERROR;
-//        }
-//
-//        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
+//        // 日報（作成者＋作成日）重複チェック
+//  if (reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate()) != null) {
+//  return ErrorKinds.DATECHECK_ERROR;
+//}
 //
 //        return ErrorKinds.CHECK_OK;
 //    }
