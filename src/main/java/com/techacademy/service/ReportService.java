@@ -38,26 +38,30 @@ public class ReportService {
     @Transactional
     public ErrorKinds save(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail ) {
 
-        // resultの設定
-//        ErrorKinds result = employeePasswordCheck(report, userDetail);
+//        // resultの設定
+//        ErrorKinds result = reportUserDetailCheck(report, model, userDetail);
 //        if (ErrorKinds.CHECK_OK != result) {
 //            return result;
 //        }
 
         // 日報（作成者＋作成日）重複チェック
-        if (reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate()) != null) {
+//        if (reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate()) != null){
+//      if (reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate()) == null) {
+//        reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate());
+        List<Report> listDate  =  reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate());
+//        List<report> listDate  =  findByEmployeeReport(userDetail.getUsername());
             return ErrorKinds.DATECHECK_ERROR;
         }
-
-        report.setDeleteFlg(false);
-
-        LocalDateTime now = LocalDateTime.now();
-        report.setCreatedAt(now);
-        report.setUpdatedAt(now);
-
-        reportRepository.save(report);
-        return ErrorKinds.SUCCESS;
-    }
+//
+//        report.setDeleteFlg(false);
+//
+//        LocalDateTime now = LocalDateTime.now();
+//        report.setCreatedAt(now);
+//        report.setUpdatedAt(now);
+//
+//        reportRepository.save(report);
+//        return ErrorKinds.SUCCESS;
+//    }
 //
 //    // 従業員更新保存
 //    @Transactional
@@ -99,30 +103,28 @@ public class ReportService {
 //        return ErrorKinds.SUCCESS;
 //    }
 //
-    // 従業員一覧表示処理
+    // 登録日報一覧表示処理
     public List<Report> findAll() {
         return reportRepository.findAll();
     }
 
-//    // 従業員の日報検索
-//    public Report findByReport() {
-//        // findByIdで検索
-//        Optional<Report> option = reportRepository.findByID();
-//        // 取得できなかった場合はnullを返す
-//        Report report = option.orElse(null);
-//        return report;
-//    }
+//    // 従業員の日報詳細検索
+    public Report findByReport(String id) {
+        // findByIdで検索
+        Optional<Report> option = reportRepository.findById(id);
+        // 取得できなかった場合はnullを返す
+        Report report = option.orElse(null);
+        return report;
+    }
 //
-//    // 従業員パスワードチェック
-//    private reportUserDetailCheck(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail) {
-//
-//        // 日報（作成者＋作成日）重複チェック
-//  if (reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate()) != null) {
-//  return ErrorKinds.DATECHECK_ERROR;
-//}
-//
-//        return ErrorKinds.CHECK_OK;
-//    }
+//    // 従業員コードの日報検索
+    public Report findByEmployeeReport(String EmployeeCode) {
+     // findByIdで検索
+        Optional<Report> option = reportRepository.findById(EmployeeCode);
+     // 取得できなかった場合はnullを返す
+        Report report = option.orElse(null);
+        return report;
+    }
 //
 //    // 従業員パスワードの半角英数字チェック処理
 //    private boolean isHalfSizeCheckError(Employee employee) {

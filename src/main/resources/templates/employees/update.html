@@ -25,6 +25,7 @@
                         <div class="card-body">
                                 <form th:action="@{/employees/{code}/update(code=${employee.code})}" th:object="${employee}" th:method="post">
                                     <div class="wizard wizard-success mb-4">
+                                    
                                         <div class="mb-3">
                                             <label class="form-label" for="code">社員番号</label>
                                             <p class="mb-1"></p>
@@ -32,6 +33,7 @@
                                                 <td class="align-middle" th:text="${employee.code}"></td>
                                             </div>
                                         </div>
+                                        
                                         <div class="mb-3">
                                             <label class="form-label" for="name">氏名</label>
                                             <p class="mb-1"></p>
@@ -40,6 +42,7 @@
                                                     th:errorclass="err" id="name">
                                                 <span th:errors="*{name}" class="text-danger"></span>
                                             </div>
+                                            
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="password">パスワード</label>
@@ -50,6 +53,7 @@
                                                 <span th:if="${passwordError} neq null" th:text="${passwordError}"
                                                     class="text-danger"></span>
                                             </div>
+                                            
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="role">権限</label>

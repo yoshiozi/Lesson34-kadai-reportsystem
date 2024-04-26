@@ -24,12 +24,12 @@ import com.techacademy.service.UserDetail;
 
 @Controller
 @RequestMapping("reports")
-public class RportController {
+public class ReportController {
 
     private final ReportService reportService;
 
     @Autowired
-    public RportController(ReportService reportService) {
+    public ReportController(ReportService reportService) {
         this.reportService = reportService;
     }
 
@@ -42,32 +42,43 @@ public class RportController {
 
         return "reports/list";
     }
+
 //
-//    // 従業員詳細画面
-//    @GetMapping(value = "/{code}/")
-//    public String detail(@PathVariable String code, Model model) {
-//
-//        model.addAttribute("employee", employeeService.findByCode(code));
-//        return "employees/detail";
-//    }
+//    // 日報詳細画面
+    @GetMapping(value = "/{id}/")
+    public String detail(@PathVariable String id, Model model1, @AuthenticationPrincipal UserDetail userDetail,
+            Model model) {
+
+        model.addAttribute("report", reportService.findByReport(id));
+        model.addAttribute("userdetail", userDetail.getEmployee());
+        return "reports/detail";
+    }
+
 //
 //    // 従業員更新画面
-//        @GetMapping(value = "/{code}/update")
-//        public String getUpdate(@PathVariable String code, Model model) {
+    @GetMapping(value = "/{id}/update")
+    public String getUpdate(@PathVariable String id, Model model1, @AuthenticationPrincipal UserDetail userDetail,
+            Model model) {
+
+        model.addAttribute("report", reportService.findByReport(id));
+        model.addAttribute("userdetail", userDetail.getEmployee());
+        // update.htmlに画面遷移
+        return "reports/update";
+    }
+
 //
-//            model.addAttribute("employee", employeeService.findByCode(code));
-//            // update.htmlに画面遷移
-//            return "employees/update";
-//        }
-//
-//     // 従業員新規更新処理
-//        @PostMapping(value = "/{code}/update")
-//        public String postUpdate(@Validated Employee employee, @PathVariable String code, BindingResult res, Model model) {
-//
-//            if(res.hasErrors()) {
-////                 エラーあり
-//                return "employees/update";
-//            }
+    // 日報新規更新処理
+    @PostMapping(value = "/{id}/update")
+    public String postUpdate(@Validated Report report, @PathVariable String id, BindingResult res, Model model1,
+            @AuthenticationPrincipal UserDetail userDetail, Model model) {
+
+        if (res.hasErrors()) {
+//                 エラーあり
+            return getUpdate(id, model1, userDetail, model);
+        }
+        return "redirect:/reports";
+    }
+
 //
 ////             一覧画面にリダイレクト
 //            // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
@@ -91,7 +102,7 @@ public class RportController {
 //
     // 日報新規登録画面
     @GetMapping(value = "/add")
-    public String create(@ModelAttribute Report report, Model model, @AuthenticationPrincipal UserDetail userDetail) {
+    public String create(@ModelAttribute Report report, @AuthenticationPrincipal UserDetail userDetail, Model model) {
 
         model.addAttribute("userdetail", userDetail.getEmployee());
         return "reports/new";
@@ -99,18 +110,19 @@ public class RportController {
 
     // 日報新規登録処理
     @PostMapping(value = "/add")
-    public String add(@Validated Report report, BindingResult res, Model model, @AuthenticationPrincipal UserDetail userDetail) {
+    public String add(@Validated Report report, BindingResult res, Model model,
+            @AuthenticationPrincipal UserDetail userDetail) {
 
         // 入力チェック
         if (res.hasErrors()) {
-            return create(report, model, userDetail);
+            return create(report, userDetail, model);
         }
 
         ErrorKinds result = reportService.save(report, model, userDetail);
-      if (ErrorMessage.contains(result)) {
-      model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-      return create(report, model, userDetail);
-  }
+        if (ErrorMessage.contains(result)) {
+            model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+            return create(report, userDetail, model);
+        }
 
         return "redirect:/reports";
 
