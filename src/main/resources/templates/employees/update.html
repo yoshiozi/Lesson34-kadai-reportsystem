@@ -16,14 +16,15 @@
             </div>
             <div class="col-12 col-xxl-6">
 
-            <div class="col-xl-12">
-            <div class="card">
-                <div class="card-header">
-                    <th>パスワードは変更する場合のみ入力してください</th>
-                </div>
-                    <div class="col-xl-12">
-                        <div class="card-body">
-                                <form th:action="@{/employees/{code}/update(code=${employee.code})}" th:object="${employee}" th:method="post">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <th>パスワードは変更する場合のみ入力してください</th>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="card-body">
+                                <form th:action="@{/employees/{code}/update(code=${employee.code})}"
+                                    th:object="${employee}" th:method="post">
                                     <div class="wizard wizard-success mb-4">
 
                                         <div class="mb-3">
@@ -68,16 +69,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>
-                        </div>
-                    </div>
-            </div>
-            </div>
-
                                     <p class="mt-5">
                                         <input type="submit" value="更新" class="btn btn-primary">
                                         <a th:href="@{/employees}" class="btn btn-primary">戻る</a>
                                     </p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -60,11 +60,11 @@ public class EmployeeController {
 
      // 従業員新規更新処理
         @PostMapping(value = "/{code}/update")
-        public String Update(@Validated Employee employee, @PathVariable String code, BindingResult res, Model model) {
+        public String update(@Validated Employee employee, @PathVariable String code, BindingResult res, Model model) {
 
             if(res.hasErrors()) {
 //                 エラーあり
-                return "employees/update";
+                return update(employee, code, res, model);
             }
 
 //             一覧画面にリダイレクト
@@ -75,13 +75,13 @@ public class EmployeeController {
 
                 if (ErrorMessage.contains(result)) {
                     model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-                    return "employees/update";
+                    return update(employee, code, res, model);
                 }
 
             } catch (DataIntegrityViolationException e) {
                 model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
                         ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
-                return "employees/update";
+                return update(employee, code, res, model);
             }
 
             return "redirect:/employees";

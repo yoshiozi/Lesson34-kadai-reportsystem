@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.techacademy.constants.ErrorKinds;
 import com.techacademy.constants.ErrorMessage;
 
-import com.techacademy.entity.Employee;
 import com.techacademy.entity.Report;
-import com.techacademy.service.EmployeeService;
 import com.techacademy.service.ReportService;
 import com.techacademy.service.UserDetail;
 
@@ -74,7 +72,7 @@ public class ReportController {
 
         if (res.hasErrors()) {
 //                 エラーあり
-            return  "reports/update";
+            return update(report, res, model, id, userDetail, model);
         }
 //             一覧画面にリダイレクト
             // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
@@ -84,17 +82,19 @@ public class ReportController {
 
                 if (ErrorMessage.contains(result)) {
                     model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-                    return "reports/update";
+                    return update(report, res, model, id, userDetail, model);
                 }
 
             } catch (DataIntegrityViolationException e) {
                 model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
                         ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
-                return "reports/update";
+                return update(report, res, model, id, userDetail, model);
             }
 
             return "redirect:/reports";
         }
+
+
 //
     // 日報新規登録画面
     @GetMapping(value = "/add")
