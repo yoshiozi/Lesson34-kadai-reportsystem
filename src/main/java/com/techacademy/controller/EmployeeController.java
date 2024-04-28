@@ -51,7 +51,7 @@ public class EmployeeController {
 
     // 従業員更新画面
         @GetMapping(value = "/{code}/update")
-        public String getUpdate(@PathVariable String code, Model model) {
+        public String edit(@PathVariable String code, Model model) {
 
             model.addAttribute("employee", employeeService.findByCode(code));
             // update.htmlに画面遷移
@@ -60,7 +60,7 @@ public class EmployeeController {
 
      // 従業員新規更新処理
         @PostMapping(value = "/{code}/update")
-        public String postUpdate(@Validated Employee employee, @PathVariable String code, BindingResult res, Model model) {
+        public String Update(@Validated Employee employee, @PathVariable String code, BindingResult res, Model model) {
 
             if(res.hasErrors()) {
 //                 エラーあり

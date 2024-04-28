@@ -55,9 +55,9 @@ public class ReportController {
     }
 
 //
-//    // 従業員更新画面
+//    // 日報更新画面
     @GetMapping(value = "/{id}/update")
-    public String getUpdate(@PathVariable String id, Model model1, @AuthenticationPrincipal UserDetail userDetail,
+    public String edit(@PathVariable String id, Model model1, @AuthenticationPrincipal UserDetail userDetail,
             Model model) {
 
         model.addAttribute("report", reportService.findByReport(id));
@@ -69,7 +69,7 @@ public class ReportController {
 //
     // 日報新規更新処理
     @PostMapping(value = "/{id}/update")
-    public String postUpdate(@Validated Report report, @PathVariable String id, BindingResult res, Model model1,
+    public String update(@Validated Report report, BindingResult res, Model model1, @PathVariable String id,
             @AuthenticationPrincipal UserDetail userDetail, Model model) {
 
         if (res.hasErrors()) {
