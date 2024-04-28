@@ -64,7 +64,7 @@ public class EmployeeController {
 
             if(res.hasErrors()) {
 //                 エラーあり
-                return update(employee, code, res, model);
+                return edit(code, model);
             }
 
 //             一覧画面にリダイレクト
@@ -75,13 +75,13 @@ public class EmployeeController {
 
                 if (ErrorMessage.contains(result)) {
                     model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-                    return update(employee, code, res, model);
+                    return edit(code, model);
                 }
 
             } catch (DataIntegrityViolationException e) {
                 model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
                         ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
-                return update(employee, code, res, model);
+                return edit(code, model);
             }
 
             return "redirect:/employees";
