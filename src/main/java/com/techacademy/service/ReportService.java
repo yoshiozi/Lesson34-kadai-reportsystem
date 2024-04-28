@@ -36,24 +36,15 @@ public class ReportService {
 //
 //    // 日報新規登録内容の保存
     @Transactional
-    public ErrorKinds save(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail ) {
+    public ErrorKinds save(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail) {
 
-//        // resultの設定
-//        ErrorKinds result =
-//        if (ErrorKinds.CHECK_OK != result) {
-//            return result;
-//        }
-
-        // 日報（作成者＋作成日）重複チェック
-//        if (reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate()) != List<Report> = 0){
-
-//        }
-//      if (reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate()) == null) {
-//        reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate());
-        List<Report> listDate  =  reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate());
-        if(listDate.size() != 0) {
+        //日報（作成者＋作成日）重複チェック
+        List<Report> listDate = reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(),report.getReportDate());
+        if (listDate.size() != 0) {
             return ErrorKinds.DATECHECK_ERROR;
         }
+
+        report.setEmployee(userDetail.getEmployee());
 
         report.setDeleteFlg(false);
 
@@ -64,30 +55,27 @@ public class ReportService {
         reportRepository.save(report);
         return ErrorKinds.SUCCESS;
     }
-//
-//    // 従業員更新保存
-//    @Transactional
-//    public ErrorKinds update(Employee employee, String code) {
-//        Employee oldEmployee = findByCode(code);
-//        if ("".equals(employee.getPassword())) {
-//            employee.setPassword(oldEmployee.getPassword());
-//        }
-//        else {
-//            // パスワードチェック
-//            ErrorKinds result = employeePasswordCheck(employee);
-//            if (ErrorKinds.CHECK_OK != result) {
-//                return result;
-//            }
-//        }
-//        employee.setDeleteFlg(oldEmployee.isDeleteFlg());
-//
-//        LocalDateTime now = LocalDateTime.now();
-//        employee.setCreatedAt(oldEmployee.getCreatedAt());
-//        employee.setUpdatedAt(now);
-//
-//        employeeRepository.save(employee);
-//        return ErrorKinds.SUCCESS;
-//    }
+
+    // 従業員更新保存
+    @Transactional
+    public ErrorKinds update(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail) {
+
+        List<Report> listDate = reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(),report.getReportDate());
+        if (listDate.size() != 0) {
+            return ErrorKinds.DATECHECK_ERROR;
+        }
+
+        report.setEmployee(userDetail.getEmployee());
+
+        report.setDeleteFlg(false);
+
+        LocalDateTime now = LocalDateTime.now();
+        report.setUpdatedAt(now);
+
+        reportRepository.save(report);
+        return ErrorKinds.SUCCESS;
+    }
+
 //
 //    // 従業員削除
 //    @Transactional
@@ -118,12 +106,13 @@ public class ReportService {
         Report report = option.orElse(null);
         return report;
     }
+
 //
 //    // 従業員コードの日報検索
     public Report findByEmployeeReport(String EmployeeCode) {
-     // findByIdで検索
+        // findByIdで検索
         Optional<Report> option = reportRepository.findById(EmployeeCode);
-     // 取得できなかった場合はnullを返す
+        // 取得できなかった場合はnullを返す
         Report report = option.orElse(null);
         return report;
     }

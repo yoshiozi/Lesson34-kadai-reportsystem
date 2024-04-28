@@ -74,31 +74,27 @@ public class ReportController {
 
         if (res.hasErrors()) {
 //                 エラーあり
-            return getUpdate(id, model1, userDetail, model);
+            return  "reports/update";
         }
-        return "redirect:/reports";
-    }
+//             一覧画面にリダイレクト
+            // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
+            // (findByIdでは削除フラグがTRUEのデータが取得出来ないため)
+            try {
+                ErrorKinds result = reportService.update(report, model, userDetail);
 
-//
-////             一覧画面にリダイレクト
-//            // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
-//            // (findByIdでは削除フラグがTRUEのデータが取得出来ないため)
-//            try {
-//                ErrorKinds result = employeeService.update(employee,code);
-//
-//                if (ErrorMessage.contains(result)) {
-//                    model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-//                    return "employees/update";
-//                }
-//
-//            } catch (DataIntegrityViolationException e) {
-//                model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
-//                        ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
-//                return "employees/update";
-//            }
-//
-//            return "redirect:/employees";
-//        }
+                if (ErrorMessage.contains(result)) {
+                    model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+                    return "reports/update";
+                }
+
+            } catch (DataIntegrityViolationException e) {
+                model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
+                        ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
+                return "reports/update";
+            }
+
+            return "redirect:/reports";
+        }
 //
     // 日報新規登録画面
     @GetMapping(value = "/add")
@@ -132,7 +128,7 @@ public class ReportController {
             return create(report, userDetail, model);
         }
 
-        return "redirect:/report";
+        return "redirect:/reports";
     }
 //
 //    // 従業員削除処理
