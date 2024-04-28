@@ -39,29 +39,31 @@ public class ReportService {
     public ErrorKinds save(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail ) {
 
 //        // resultの設定
-//        ErrorKinds result = reportUserDetailCheck(report, model, userDetail);
+//        ErrorKinds result =
 //        if (ErrorKinds.CHECK_OK != result) {
 //            return result;
 //        }
 
         // 日報（作成者＋作成日）重複チェック
-//        if (reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate()) != null){
+//        if (reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate()) != List<Report> = 0){
+
+//        }
 //      if (reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate()) == null) {
 //        reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate());
         List<Report> listDate  =  reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(), report.getReportDate());
-//        List<report> listDate  =  findByEmployeeReport(userDetail.getUsername());
+        if(listDate.size() != 0) {
             return ErrorKinds.DATECHECK_ERROR;
         }
-//
-//        report.setDeleteFlg(false);
-//
-//        LocalDateTime now = LocalDateTime.now();
-//        report.setCreatedAt(now);
-//        report.setUpdatedAt(now);
-//
-//        reportRepository.save(report);
-//        return ErrorKinds.SUCCESS;
-//    }
+
+        report.setDeleteFlg(false);
+
+        LocalDateTime now = LocalDateTime.now();
+        report.setCreatedAt(now);
+        report.setUpdatedAt(now);
+
+        reportRepository.save(report);
+        return ErrorKinds.SUCCESS;
+    }
 //
 //    // 従業員更新保存
 //    @Transactional

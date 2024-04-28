@@ -118,31 +118,21 @@ public class ReportController {
             return create(report, userDetail, model);
         }
 
-        ErrorKinds result = reportService.save(report, model, userDetail);
-        if (ErrorMessage.contains(result)) {
-            model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+        try {
+            ErrorKinds result = reportService.save(report, model, userDetail);
+
+            if (ErrorMessage.contains(result)) {
+                model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+                return create(report, userDetail, model);
+            }
+
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DATECHECK_ERROR),
+                    ErrorMessage.getErrorValue(ErrorKinds.DATECHECK_ERROR));
             return create(report, userDetail, model);
         }
 
-        return "redirect:/reports";
-
-//        // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
-        // (findByIdでは削除フラグがTRUEのデータが取得出来ないため)
-//        try {
-//            ErrorKinds result = reportService.save(report, model, userDetail);
-//
-//            if (ErrorMessage.contains(result)) {
-//                model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-//                return create(report, model, userDetail);
-//            }
-
-//        } catch (DataIntegrityViolationException e) {
-//            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DATECHECK_ERROR),
-//                    ErrorMessage.getErrorValue(ErrorKinds.DATECHECK_ERROR));
-//            return create(report, model, userDetail);
-//        }
-
-//        return "redirect:/report";
+        return "redirect:/report";
     }
 //
 //    // 従業員削除処理

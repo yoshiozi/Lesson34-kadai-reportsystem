@@ -25,9 +25,10 @@
                                     <div class="mb-3">
                                         <label class="form-label" for="reportDate">日付</label>
                                         <p class="mb-1"></p>
-                                        <div class="col-md-4">
-                                            <input class="form-control" type="date" th:field="*{reportDate}" th:errorclass="err" id="code">
+                                        <div class="col-md-5">
+                                            <input class="form-control" type="date" th:field="*{reportDate}" th:errorclass="err" id="reportDate">
                                             <span th:errors="*{reportDate}" class="text-danger"></span>
+                                            <span th:if="${reportDateError} neq null" th:text="${reportDateError}" class="text-danger"></span>
                                         </div>
                                     </div>
 
@@ -43,7 +44,7 @@
                                         <p class="mb-1"></p>
                                         <div class="col-md-7">
                                             <input class="form-control" type="text" th:field="*{title}"
-                                                th:errorclass="err" id="code">
+                                                th:errorclass="err" id="title">
                                             <span th:errors="*{title}" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -51,7 +52,7 @@
                                     <div class="mb-3">
                                         <label class="form-label" for="content">内容</label>
                                         <p class="mb-1"></p>
-                                        <textarea class="form-control" rows="10" type="text" th:field="*{content}" sth:errorclass="err" id="code"></textarea>
+                                        <textarea class="form-control" rows="10" type="text" th:field="*{content}" sth:errorclass="err" id="content"></textarea>
                                         <span th:errors="*{content}" class="text-danger"></span>
                                     </div>
 
