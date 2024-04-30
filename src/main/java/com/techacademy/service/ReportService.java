@@ -34,6 +34,7 @@ public class ReportService {
 
         //日報（作成者＋作成日）重複チェック
         List<Report> listDate = reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(),report.getReportDate());
+//        System.out.println("listDate.size() = " + listDate.size());
         if (listDate.size() != 0) {
             return ErrorKinds.DATECHECK_ERROR;
         }
@@ -50,18 +51,25 @@ public class ReportService {
         return ErrorKinds.SUCCESS;
     }
 
-    // 従業員更新保存
+    // 日報更新保存
     @Transactional
     public ErrorKinds update(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail) {
 
-        List<Report> listDate = reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(),report.getReportDate());
-        if (listDate.size() != 0) {
-            return ErrorKinds.DATECHECK_ERROR;
+        List<Report> listDate1 = reportRepository.findByEmployeeAndReportDateAndId(userDetail.getEmployee(),report.getReportDate(), report.getId());
+//        System.out.println("listDate1.size() = " + listDate1.size());
+        if (listDate1.size() == 1) {
+            return ErrorKinds.CHECK_OK;
         }
+//            List<Report> listDate = reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(),report.getReportDate());
+//      System.out.println("listDate.size() = " + listDate.size());
+//      System.out.println("size() = " + size());
+//        if (listDate.size() != 0) {
+//            return ErrorKinds.DATECHECK_ERROR;
+//        }
 
         report.setEmployee(userDetail.getEmployee());
 
-        report.setDeleteFlg(false);
+        report.setDeleteFlg(report.isDeleteFlg());
 
         LocalDateTime now = LocalDateTime.now();
         report.setUpdatedAt(now);
@@ -102,14 +110,14 @@ public class ReportService {
     }
 
 //
-//    // 従業員コードの日報検索
-    public Report findByEmployeeReport(String EmployeeCode) {
-        // findByIdで検索
-        Optional<Report> option = reportRepository.findById(EmployeeCode);
-        // 取得できなかった場合はnullを返す
-        Report report = option.orElse(null);
-        return report;
-    }
+////    // 従業員コードで日報検索（）
+//    public Report findByEmployeeReport(String EmployeeCode) {
+//        // findByIdで検索
+//        Optional<Report> option = reportRepository.findById(EmployeeCode);
+//        // 取得できなかった場合はnullを返す
+//        Report report = option.orElse(null);
+//        return report;
+//    }
 //
 //    // 従業員パスワードの半角英数字チェック処理
 //    private boolean isHalfSizeCheckError(Employee employee) {

@@ -55,45 +55,48 @@ public class ReportController {
 //
 //    // 日報更新画面
     @GetMapping(value = "/{id}/update")
-    public String edit(@PathVariable String id, Model model1, @AuthenticationPrincipal UserDetail userDetail,
+    public String edit(@PathVariable String id, Report report, Model model1, @AuthenticationPrincipal UserDetail userDetail,
             Model model) {
-
+        if (id != null) {
         model.addAttribute("report", reportService.findByReport(id));
+        }else{
+            model.addAttribute("report", report);
+        }
+
         model.addAttribute("userdetail", userDetail.getEmployee());
         // update.htmlに画面遷移
         return "reports/update";
     }
 
 //
-    // 日報新規更新処理
+    // 日報更新処理
     @PostMapping(value = "/{id}/update")
-    public String update(@Validated Report report, BindingResult res, Model model1, @PathVariable String id,
+    public String update(@Validated Report report, BindingResult res, @PathVariable String id, Model model1,
             @AuthenticationPrincipal UserDetail userDetail, Model model) {
 
         if (res.hasErrors()) {
 //                 エラーあり
-            return update(report, res, model, id, userDetail, model);
+            return edit(null, report, model, userDetail, model);
         }
 //             一覧画面にリダイレクト
-            // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
-            // (findByIdでは削除フラグがTRUEのデータが取得出来ないため)
-            try {
-                ErrorKinds result = reportService.update(report, model, userDetail);
+        // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
+        // (findByIdでは削除フラグがTRUEのデータが取得出来ないため)
+        try {
+            ErrorKinds result = reportService.update(report, model, userDetail);
 
-                if (ErrorMessage.contains(result)) {
-                    model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-                    return update(report, res, model, id, userDetail, model);
-                }
-
-            } catch (DataIntegrityViolationException e) {
-                model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
-                        ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
-                return update(report, res, model, id, userDetail, model);
+            if (ErrorMessage.contains(result)) {
+                model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+                return edit(id, report, model, userDetail, model);
             }
 
-            return "redirect:/reports";
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
+                    ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
+            return edit(id, report, model, userDetail, model);
         }
 
+        return "redirect:/reports";
+    }
 
 //
     // 日報新規登録画面
