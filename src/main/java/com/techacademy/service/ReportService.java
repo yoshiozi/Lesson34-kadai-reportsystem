@@ -30,7 +30,7 @@ public class ReportService {
 //
 //    // 日報新規登録内容の保存
     @Transactional
-    public ErrorKinds save(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail) {
+    public ErrorKinds save(Report report, UserDetail userDetail) {
 
         //日報（作成者＋作成日）重複チェック
         List<Report> listDate = reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(),report.getReportDate());
@@ -53,8 +53,9 @@ public class ReportService {
 
     // 日報更新保存
     @Transactional
-    public ErrorKinds update(Report report, Model model, @AuthenticationPrincipal UserDetail userDetail) {
+    public ErrorKinds update(Report report, String id, UserDetail userDetail) {
 
+        //登録重複チェック（表示中のレポートは除外）
         List<Report> listDate1 = reportRepository.findByEmployeeAndReportDateAndId(userDetail.getEmployee(),report.getReportDate(), report.getId());
 //        System.out.println("listDate1.size() = " + listDate1.size());
         if (listDate1.size() == 1) {

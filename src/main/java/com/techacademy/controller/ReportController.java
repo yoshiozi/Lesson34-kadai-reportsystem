@@ -44,7 +44,7 @@ public class ReportController {
 //
 //    // 日報詳細画面
     @GetMapping(value = "/{id}/")
-    public String detail(@PathVariable String id, Model model1, @AuthenticationPrincipal UserDetail userDetail,
+    public String detail(@PathVariable String id, @AuthenticationPrincipal UserDetail userDetail,
             Model model) {
 
         model.addAttribute("report", reportService.findByReport(id));
@@ -55,7 +55,7 @@ public class ReportController {
 //
 //    // 日報更新画面
     @GetMapping(value = "/{id}/update")
-    public String edit(@PathVariable String id, Report report, Model model1, @AuthenticationPrincipal UserDetail userDetail,
+    public String edit(@PathVariable String id, Report report, @AuthenticationPrincipal UserDetail userDetail,
             Model model) {
         if (id != null) {
         model.addAttribute("report", reportService.findByReport(id));
@@ -71,28 +71,28 @@ public class ReportController {
 //
     // 日報更新処理
     @PostMapping(value = "/{id}/update")
-    public String update(@Validated Report report, BindingResult res, @PathVariable String id, Model model1,
+    public String update(@Validated Report report, BindingResult res, @PathVariable String id,
             @AuthenticationPrincipal UserDetail userDetail, Model model) {
 
         if (res.hasErrors()) {
 //                 エラーあり
-            return edit(null, report, model, userDetail, model);
+            return edit(null, report, userDetail, model);
         }
 //             一覧画面にリダイレクト
         // 論理削除を行った従業員番号を指定すると例外となるためtry~catchで対応
         // (findByIdでは削除フラグがTRUEのデータが取得出来ないため)
         try {
-            ErrorKinds result = reportService.update(report, model, userDetail);
+            ErrorKinds result = reportService.update(report, id, userDetail);
 
             if (ErrorMessage.contains(result)) {
                 model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-                return edit(id, report, model, userDetail, model);
+                return edit(id, report, userDetail, model);
             }
 
         } catch (DataIntegrityViolationException e) {
             model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
                     ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
-            return edit(id, report, model, userDetail, model);
+            return edit(id, report, userDetail, model);
         }
 
         return "redirect:/reports";
@@ -118,7 +118,7 @@ public class ReportController {
         }
 
         try {
-            ErrorKinds result = reportService.save(report, model, userDetail);
+            ErrorKinds result = reportService.save(report, userDetail);
 
             if (ErrorMessage.contains(result)) {
                 model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
