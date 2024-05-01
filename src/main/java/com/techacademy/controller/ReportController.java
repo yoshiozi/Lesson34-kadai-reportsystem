@@ -62,7 +62,6 @@ public class ReportController {
         }else{
             model.addAttribute("report", report);
         }
-
         model.addAttribute("userdetail", userDetail.getEmployee());
         // update.htmlに画面遷移
         return "reports/update";

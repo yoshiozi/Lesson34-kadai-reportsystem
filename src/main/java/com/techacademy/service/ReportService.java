@@ -61,6 +61,7 @@ public class ReportService {
         if (listDate1.size() == 1) {
             return ErrorKinds.CHECK_OK;
         }
+        Report report_before = reportRepository.findById(id).get();
 //            List<Report> listDate = reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(),report.getReportDate());
 //      System.out.println("listDate.size() = " + listDate.size());
 //      System.out.println("size() = " + size());
@@ -70,9 +71,10 @@ public class ReportService {
 
         report.setEmployee(userDetail.getEmployee());
 
-        report.setDeleteFlg(report.isDeleteFlg());
+        report.setDeleteFlg(report_before.isDeleteFlg());
 
         LocalDateTime now = LocalDateTime.now();
+        report.setCreatedAt(report_before.getCreatedAt());
         report.setUpdatedAt(now);
 
         reportRepository.save(report);
