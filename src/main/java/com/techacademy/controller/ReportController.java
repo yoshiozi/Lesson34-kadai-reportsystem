@@ -134,18 +134,18 @@ public class ReportController {
     }
 //
 //    // 従業員削除処理
-//    @PostMapping(value = "/{code}/delete")
-//    public String delete(@PathVariable String code, @AuthenticationPrincipal UserDetail userDetail, Model model) {
-//
-//        ErrorKinds result = employeeService.delete(code, userDetail);
-//
-//        if (ErrorMessage.contains(result)) {
-//            model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-//            model.addAttribute("employee", employeeService.findByCode(code));
-//            return detail(code, model);
-//        }
-//
-//        return "redirect:/employees";
-//    }
+    @PostMapping(value = "/{id}/delete")
+    public String delete(@PathVariable String id, @AuthenticationPrincipal UserDetail userDetail, Model model) {
+
+        ErrorKinds result = reportService.delete(id);
+
+        if (ErrorMessage.contains(result)) {
+            model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+            model.addAttribute("report", reportService.findByReport(id));
+            return detail(id, userDetail, model);
+        }
+
+        return "redirect:/reports";
+    }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.techacademy.constants.ErrorKinds;
+import com.techacademy.entity.Employee;
 import com.techacademy.entity.Report;
 import com.techacademy.repository.ReportRepository;
 
@@ -55,48 +56,37 @@ public class ReportService {
     @Transactional
     public ErrorKinds update(Report report, String id, UserDetail userDetail) {
 
-        //登録重複チェック（表示中のレポートは除外）
+        //登録日重複チェック（表示中のレポートは除外）
         List<Report> listDate1 = reportRepository.findByEmployeeAndReportDateAndId(userDetail.getEmployee(),report.getReportDate(), report.getId());
-//        System.out.println("listDate1.size() = " + listDate1.size());
-        if (listDate1.size() == 1) {
-            return ErrorKinds.CHECK_OK;
-        }
-        Report report_before = reportRepository.findById(id).get();
-//            List<Report> listDate = reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(),report.getReportDate());
-//      System.out.println("listDate.size() = " + listDate.size());
-//      System.out.println("size() = " + size());
-//        if (listDate.size() != 0) {
-//            return ErrorKinds.DATECHECK_ERROR;
-//        }
+//      System.out.println("listDate1.size() = " + listDate1.size());
+      if (listDate1.size() == 1) {
+          return reportSave(report, id, userDetail);
+          }
 
-        report.setEmployee(userDetail.getEmployee());
-
-        report.setDeleteFlg(report_before.isDeleteFlg());
-
-        LocalDateTime now = LocalDateTime.now();
-        report.setCreatedAt(report_before.getCreatedAt());
-        report.setUpdatedAt(now);
-
-        reportRepository.save(report);
+    // 重複チェック
+    ErrorKinds result = reportDateCheck(report, id, userDetail);
+    if (ErrorKinds.CHECK_OK != result) {
+        return result;
+    }
         return ErrorKinds.SUCCESS;
     }
 
 //
-//    // 従業員削除
-//    @Transactional
-//    public ErrorKinds delete(String code, UserDetail userDetail) {
-//
+    // 日報削除
+    @Transactional
+    public ErrorKinds delete(String id) {
+
 //        // 自分を削除しようとした場合はエラーメッセージを表示
-//        if (code.equals(userDetail.getEmployee().getCode())) {
+//        if (id.equals(userDetail.getReport().getId())) {
 //            return ErrorKinds.LOGINCHECK_ERROR;
 //        }
-//        Employee employee = findByCode(code);
-//        LocalDateTime now = LocalDateTime.now();
-//        employee.setUpdatedAt(now);
-//        employee.setDeleteFlg(true);
-//
-//        return ErrorKinds.SUCCESS;
-//    }
+        Report report = findByReport(id);
+        LocalDateTime now = LocalDateTime.now();
+        report.setUpdatedAt(now);
+        report.setDeleteFlg(true);
+
+        return ErrorKinds.SUCCESS;
+    }
 //
     // 登録日報一覧表示処理
     public List<Report> findAll() {
@@ -113,23 +103,38 @@ public class ReportService {
     }
 
 //
-////    // 従業員コードで日報検索（）
-//    public Report findByEmployeeReport(String EmployeeCode) {
-//        // findByIdで検索
-//        Optional<Report> option = reportRepository.findById(EmployeeCode);
-//        // 取得できなかった場合はnullを返す
-//        Report report = option.orElse(null);
-//        return report;
-//    }
+//    // 対象従業員の日報リストを取得（）
+    public List<Report> findByEmployee(Employee employee) {
+        // findByIdで検索
+        return reportRepository.findByEmployee(employee);
+    }
 //
-//    // 従業員パスワードの半角英数字チェック処理
-//    private boolean isHalfSizeCheckError(Employee employee) {
+//    // 登録日重複チェック
+    public ErrorKinds reportDateCheck(Report report, String id, UserDetail userDetail) {
+    List<Report> listDate = reportRepository.findByEmployeeAndReportDate(userDetail.getEmployee(),report.getReportDate());
+//  System.out.println("listDate.size() = " + listDate.size());
+//  System.out.println("size() = " + size());
+    if (listDate.size() != 0) {
+        return ErrorKinds.DATECHECK_ERROR;
+    }
+    return reportSave(report, id, userDetail);
+    }
 //
-//        // 半角英数字チェック
-//        Pattern pattern = Pattern.compile("^[A-Za-z0-9]+$");
-//        Matcher matcher = pattern.matcher(employee.getPassword());
-//        return !matcher.matches();
-//    }
+//        // レポート更新
+ public ErrorKinds reportSave(Report report, String id, UserDetail userDetail) {
+    Report report_before = reportRepository.findById(id).get();
+
+    report.setEmployee(userDetail.getEmployee());
+
+    report.setDeleteFlg(report_before.isDeleteFlg());
+
+    LocalDateTime now = LocalDateTime.now();
+    report.setCreatedAt(report_before.getCreatedAt());
+    report.setUpdatedAt(now);
+
+    reportRepository.save(report);
+    return ErrorKinds.SUCCESS;
+ }
 //
 //    // 従業員パスワードの8文字～16文字チェック処理
 //    public boolean isOutOfRangePassword(Employee employee) {
